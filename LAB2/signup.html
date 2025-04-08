@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CSI2109-Lab2(Signup)</title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+  </head>
+  <body>
+    <h1>사이트 회원가입</h1>
+    <p class="link-desc">
+      이미 계정이 있으신가요?
+      <a href="login.html">로그인 페이지로 이동</a>
+    </p>
+    <form>
+      <div class="form-line">
+        <p class="form-element-label">이름</p>
+        <input
+          type="text"
+          name="name"
+          class="form-element"
+          placeholder="이름 입력"
+          autofocus
+          autocomplete="given-name"
+          required
+        />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">생년월일</p>
+        <input type="date" class="form-element" required />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">성별</p>
+        <div class="form-element">
+          <input type="radio" id="male" name="gender" value="male" />
+          <label for="male">남자</label>
+          <input type="radio" id="female" name="gender" value="female" />
+          <label for="female">여자</label>
+        </div>
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">학년</p>
+        <input
+          type="number"
+          class="form-element"
+          min="1"
+          max="5"
+          step="1"
+          required
+        />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">아이디</p>
+        <input
+          type="text"
+          class="form-element"
+          placeholder="아이디 입력"
+          required
+        />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">비밀번호</p>
+        <input
+          type="password"
+          class="form-element"
+          placeholder="비밀번호 입력"
+          required
+        />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">비밀번호 확인</p>
+        <input
+          type="password"
+          class="form-element"
+          placeholder="비밀번호 재입력"
+        />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">이메일</p>
+        <div class="form-element" style="padding: 0">
+          <input
+            type="text"
+            class="form-element"
+            placeholder="이메일 주소 입력"
+            required
+          />
+          @
+          <select name="email-domain" id="email-domain" class="form-element">
+            <option value="yonsei">yonsei.ac.kr</option>
+            <option value="gmail">gmail.com</option>
+            <option value="naver">naver.com</option>
+            <option value="daum">daum.net</option>
+          </select>
+        </div>
+      </div>
+      <div class="button-container">
+        <button class="confirm">회원가입</button>
+        <button class="cancel">취소</button>
+      </div>
+    </form>
+  </body>
+</html>

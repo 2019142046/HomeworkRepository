@@ -1,0 +1,90 @@
+body {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  overflow-x: hidden;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+h1 {
+  font-size: 3.2rem;
+}
+
+.link-desc {
+  margin-top: -15px;
+  font-size: 1.6rem;
+}
+
+.link-desc a {
+  font-weight: bold;
+  margin: 10px;
+  color: #00a2ff;
+  text-decoration: none;
+}
+
+form {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 10px;
+  padding-right: 30px;
+  border: 2px solid #cacaca;
+  border-radius: 12px;
+}
+
+.form-line {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-element {
+  flex-grow: 1;
+  font-size: 1.4rem;
+  padding: 8px;
+  text-align: left;
+}
+
+.form-element-label {
+  width: 180px;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+#male,
+#female {
+  width: 20px;
+  height: 20px;
+}
+
+label {
+  margin-right: 15px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 30px;
+}
+
+button {
+  font-size: 1.6rem;
+  padding: 10px;
+  margin-left: 20px;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+button.confirm {
+  background-color: #bdd2ff;
+}
+
+button.cancel {
+  background-color: #ffc8be;
+}
