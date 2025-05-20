@@ -3,8 +3,8 @@ body {
   height: auto;
   text-align: center;
   overflow-x: hidden;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  font-family: "Arial", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif;
 }
 
 .main-container {
@@ -48,16 +48,67 @@ nav a.noroute {
 }
 
 .keyword-filter-input {
-  flex-grow: 1;
   font-size: 1.4rem;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 8px;
 }
 
+.main-section {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.main-section-header {
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #222222;
+}
+
+.sort-filter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1.4rem;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  border-radius: 8px;
+  border: 2px solid #cacaca;
+  background-color: rgb(235, 235, 235);
+}
+
+.sort-filter p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-weight: bold;
+}
+
+.radio-group {
+  margin-left: 30px;
+}
+
+.radio-group label {
+  font-size: 1.2rem;
+}
+
+.radio-group-item {
+  display: inline;
+}
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
 @media (width <= 480px) {
   h1 {
-    font-size: 10vw;
+    font-size: 1.8rem;
   }
 
   nav {
@@ -66,15 +117,39 @@ nav a.noroute {
     justify-content: center;
   }
 
-  .poster-section-element {
-    width: 100%;
+  nav a {
+    font-size: 1.5rem;
+  }
+
+  .keyword-filter-input {
+    width: 75%;
+    font-size: 1.2rem;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+  }
+
+  .keyword-filter-button {
+    font-size: 1.2rem;
+    padding-top: 3px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+
+  .sort-filter {
+    flex-direction: column;
+  }
+
+  .radio-group-item {
+    display: block;
   }
 }
 
 @media (480px < width <= 800px) {
-  .poster-section-element {
-    width: 45%;
-  }
 }
 
 /* My legacy code from LAB02 (signup.html, login.html use styles below) */

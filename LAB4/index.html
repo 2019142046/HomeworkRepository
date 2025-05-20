@@ -20,6 +20,79 @@
         />
         <button class="keyword-filter-button">검색</button>
       </section>
+      <section class="main-section">
+        <div class="main-section-header">Movies</div>
+        <div class="sort-filter">
+          <p>정렬 기준</p>
+          <div class="radio-group">
+            <div class="radio-group-item">
+              <input type="radio" id="sort-title" name="sort" value="title" />
+              <label for="sort-title">평점 내림차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input type="radio" id="sort-year" name="sort" value="year" />
+              <label for="sort-year">평점 오름차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input type="radio" id="sort-rating" name="sort" value="rating" />
+              <label for="sort-rating">개봉 내림차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-popularity"
+                name="sort"
+                value="popularity"
+              />
+              <label for="sort-popularity">개봉 오름차순</label>
+            </div>
+          </div>
+        </div>
+        <div class="movie-list"></div>
+      </section>
     </div>
+
+    <script>
+      function createMovieCard(movie) {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+
+        card.innerHTML = `
+          <img src="${movie.image}" alt="${movie.title}" class="movie-poster">
+          <div class="movie-info">
+            <h3 class="movie-title">${movie.title}</h3>
+            <p class="movie-rating">평점: ${movie.vote}</p>
+            <p class="movie-release">개봉일: ${movie.release_date}</p>
+            <p class="movie-runtime">상영시간: ${movie.runtime}분</p>
+            <p class="movie-overview">${movie.overview}</p>
+          </div>
+        `;
+
+        return card;
+      }
+
+      async function loadMovies() {
+        try {
+          const response = await fetch("product.json");
+          const movies = await response.json();
+
+          const movieList = document.querySelector(".movie-list");
+          movieList.innerHTML = ""; // Clear existing content
+
+          console.log(movies);
+          movies.forEach((movie) => {
+            const movieCard = createMovieCard(movie);
+            movieList.appendChild(movieCard);
+          });
+        } catch (error) {
+          console.error("Error loading movies:", error);
+        }
+      }
+
+      window.onload = loadMovies;
+    </script>
   </body>
 </html>
