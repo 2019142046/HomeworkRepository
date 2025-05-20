@@ -26,28 +26,43 @@
           <p>정렬 기준</p>
           <div class="radio-group">
             <div class="radio-group-item">
-              <input type="radio" id="sort-title" name="sort" value="title" />
-              <label for="sort-title">평점 내림차순</label>
-            </div>
-
-            <div class="radio-group-item">
-              <input type="radio" id="sort-year" name="sort" value="year" />
-              <label for="sort-year">평점 오름차순</label>
-            </div>
-
-            <div class="radio-group-item">
-              <input type="radio" id="sort-rating" name="sort" value="rating" />
-              <label for="sort-rating">개봉 내림차순</label>
+              <input
+                type="radio"
+                id="sort-rate-desc"
+                name="sort"
+                value="rate-desc"
+              />
+              <label for="sort-rate-desc">평점 내림차순</label>
             </div>
 
             <div class="radio-group-item">
               <input
                 type="radio"
-                id="sort-popularity"
+                id="sort-rate-asc"
                 name="sort"
-                value="popularity"
+                value="rate-asc"
               />
-              <label for="sort-popularity">개봉 오름차순</label>
+              <label for="sort-rate-asc">평점 오름차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-release-desc"
+                name="sort"
+                value="release-desc"
+              />
+              <label for="sort-release-desc">개봉 내림차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-release-asc"
+                name="sort"
+                value="release-asc"
+              />
+              <label for="sort-release-asc">개봉 오름차순</label>
             </div>
           </div>
         </div>
@@ -56,12 +71,15 @@
     </div>
 
     <script>
+      let movies = [];
+      let filteredMovies = [];
+      let displayingMovies = [];
+
       function generateMovieCard(movie) {
         const card = document.createElement("div");
         card.className = "movie-card";
 
         card.innerHTML = `
-          <div class="movie-card">
             <img src="images/${movie.image}" alt="${
           movie.image
         }" class="movie-image" />
@@ -71,31 +89,99 @@
             <p class="movie-title">${movie.title}</p>
             <p class="movie-release">개봉일: ${movie.release_date}</p>
             <p class="movie-rating">★ ${movie.vote}</p>
-          </div>
         `;
 
         return card;
       }
 
-      async function loadMovies() {
+      function sortMovies(sortType) {
+        switch (sortType) {
+          case "rate-desc":
+            filteredMovies.sort((a, b) => b.vote - a.vote);
+            break;
+          case "rate-asc":
+            filteredMovies.sort((a, b) => a.vote - b.vote);
+            break;
+          case "release-desc":
+            filteredMovies.sort(
+              (a, b) => new Date(b.release_date) - new Date(a.release_date)
+            );
+            break;
+          case "release-asc":
+            filteredMovies.sort(
+              (a, b) => new Date(a.release_date) - new Date(b.release_date)
+            );
+            break;
+        }
+        displayingMovies = filteredMovies.slice(0, 3);
+        loadMovies();
+      }
+
+      function filterMovies(keyword) {
+        if (!keyword) {
+          filteredMovies = movies;
+        } else {
+          filteredMovies = movies.filter((movie) =>
+            movie.title.toLowerCase().includes(keyword.toLowerCase())
+          );
+        }
+        displayingMovies = filteredMovies.slice(0, 3);
+        loadMovies();
+      }
+
+      async function getMovies() {
         try {
           const response = await fetch("product.json");
-          const movies = await response.json();
+          movies = await response.json();
 
-          const movieList = document.querySelector(".movie-list");
-          movieList.innerHTML = "";
-
-          console.log(movies);
-          movies.forEach((movie) => {
-            const movieCard = generateMovieCard(movie);
-            movieList.appendChild(movieCard);
-          });
+          filteredMovies = movies;
+          displayingMovies = filteredMovies.slice(0, 3);
+          loadMovies();
+          registerEventListeners();
         } catch (error) {
           console.error("Error loading movies:", error);
         }
       }
 
-      window.onload = loadMovies;
+      function registerEventListeners() {
+        const radioButtons = document.querySelectorAll('input[name="sort"]');
+        radioButtons.forEach((radio) => {
+          radio.addEventListener("change", (e) => {
+            sortMovies(e.target.value);
+          });
+        });
+
+        const searchInput = document.querySelector(".keyword-filter-input");
+        const searchButton = document.querySelector(".keyword-filter-button");
+
+        searchButton.addEventListener("click", () => {
+          filterMovies(searchInput.value);
+        });
+      }
+
+      function loadMovies() {
+        const movieList = document.querySelector(".movie-list");
+        movieList.innerHTML = "";
+
+        const displayCount = displayingMovies.length;
+        displayingMovies = filteredMovies.slice(
+          0,
+          Math.min(displayCount + 3, filteredMovies.length)
+        );
+
+        displayingMovies.forEach((movie) => {
+          const movieCard = generateMovieCard(movie);
+          movieList.appendChild(movieCard);
+        });
+      }
+
+      window.addEventListener("scroll", function () {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          loadMovies();
+        }
+      });
+
+      window.onload = getMovies;
     </script>
   </body>
 </html>
