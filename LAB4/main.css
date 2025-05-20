@@ -1,0 +1,160 @@
+body {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  overflow-x: hidden;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+.main-container {
+  max-width: 1020px;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+h1 {
+  font-size: 3.2rem;
+  margin-bottom: 10px;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: left;
+}
+
+nav a {
+  font-weight: bold;
+  font-size: 1.6rem;
+  color: #00a2ff;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+nav a.noroute {
+  color: black;
+}
+
+.keyword-filter-section {
+  display: flex;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.keyword-filter-input {
+  flex-grow: 1;
+  font-size: 1.4rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 8px;
+}
+
+@media (width <= 480px) {
+  h1 {
+    font-size: 10vw;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .poster-section-element {
+    width: 100%;
+  }
+}
+
+@media (480px < width <= 800px) {
+  .poster-section-element {
+    width: 45%;
+  }
+}
+
+/* My legacy code from LAB02 (signup.html, login.html use styles below) */
+
+.link-desc {
+  font-size: 1.6rem;
+}
+
+.link-desc a {
+  font-weight: bold;
+  margin: 10px;
+  color: #00a2ff;
+  text-decoration: none;
+}
+
+form {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 10px;
+  padding-right: 30px;
+  border: 2px solid #cacaca;
+  border-radius: 12px;
+}
+
+.form-line {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-element {
+  flex-grow: 1;
+  font-size: 1.4rem;
+  padding: 8px;
+  text-align: left;
+}
+
+.form-element-label {
+  width: 180px;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+#male,
+#female {
+  width: 20px;
+  height: 20px;
+}
+
+label {
+  margin-right: 15px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 30px;
+}
+
+button {
+  font-size: 1.6rem;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 20px;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+button.confirm {
+  background-color: #bdd2ff;
+}
+
+button.cancel {
+  background-color: #ffc8be;
+}
