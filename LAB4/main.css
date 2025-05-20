@@ -101,9 +101,66 @@ nav a.noroute {
 }
 
 .movie-list {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.movie-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 0.6;
+  border: 2px solid #cacaca;
+  padding: 5px;
+}
+
+.movie-image {
+  width: 100%;
+  aspect-ratio: 0.67;
+  object-fit: cover;
+}
+
+.movie-info {
+  visibility: hidden;
+  position: absolute;
+  margin: 5px;
+  width: auto;
+  aspect-ratio: 0.67;
+  font-size: 1.2rem;
+  color: white;
+  top: 0px;
+  left: 0px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.movie-card:hover .movie-info {
+  visibility: visible;
+}
+
+.movie-title {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-size: 1.2rem;
+}
+
+.movie-release {
+  color: #555555;
+  margin-top: 3px;
+  margin-bottom: 0px;
+  font-size: 1rem;
+}
+
+.movie-rating {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 0px;
 }
 
 @media (width <= 480px) {

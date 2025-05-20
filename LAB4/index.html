@@ -56,18 +56,21 @@
     </div>
 
     <script>
-      function createMovieCard(movie) {
+      function generateMovieCard(movie) {
         const card = document.createElement("div");
         card.className = "movie-card";
 
         card.innerHTML = `
-          <img src="${movie.image}" alt="${movie.title}" class="movie-poster">
-          <div class="movie-info">
-            <h3 class="movie-title">${movie.title}</h3>
-            <p class="movie-rating">평점: ${movie.vote}</p>
+          <div class="movie-card">
+            <img src="images/${movie.image}" alt="${
+          movie.image
+        }" class="movie-image" />
+            <div class="movie-info">
+              ${movie.overview.replaceAll('\\"', '"')}
+            </div>
+            <p class="movie-title">${movie.title}</p>
             <p class="movie-release">개봉일: ${movie.release_date}</p>
-            <p class="movie-runtime">상영시간: ${movie.runtime}분</p>
-            <p class="movie-overview">${movie.overview}</p>
+            <p class="movie-rating">★ ${movie.vote}</p>
           </div>
         `;
 
@@ -80,11 +83,11 @@
           const movies = await response.json();
 
           const movieList = document.querySelector(".movie-list");
-          movieList.innerHTML = ""; // Clear existing content
+          movieList.innerHTML = "";
 
           console.log(movies);
           movies.forEach((movie) => {
-            const movieCard = createMovieCard(movie);
+            const movieCard = generateMovieCard(movie);
             movieList.appendChild(movieCard);
           });
         } catch (error) {
