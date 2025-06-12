@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CSI2109-Lab5 (Login)</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+  </head>
+  <body>
+    <h1>사이트 로그인</h1>
+    <p class="link-desc">
+      영화 정보를 확인해보세요!
+      <a href="/">메인 페이지로 이동</a>
+    </p>
+    <p class="link-desc">
+      아직 계정이 없으신가요?
+      <a href="/signup">회원가입 페이지로 이동</a>
+    </p>
+    <form>
+      <div class="form-line">
+        <p class="form-element-label">아이디</p>
+        <input
+          type="text"
+          class="form-element"
+          placeholder="아이디 입력"
+          autofocus
+          required
+        />
+      </div>
+      <div class="form-line">
+        <p class="form-element-label">비밀번호</p>
+        <input
+          type="password"
+          class="form-element"
+          placeholder="비밀번호 입력"
+          required
+        />
+      </div>
+      <div class="button-container">
+        <button class="confirm">로그인</button>
+      </div>
+    </form>
+  </body>
+</html>

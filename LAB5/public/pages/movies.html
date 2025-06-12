@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CSI2109-Lab5 (Movie Detail)</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <h1>CSI 영화 정보 사이트</h1>
+      <nav>
+        <a href="/">메인 페이지</a>
+        <a href="/login">로그인</a>
+        <a href="/signup">회원가입</a>
+      </nav>
+      <section class="movie-detail-section" id="movie-detail-section"></section>
+      <section class="comment-section">
+        <h2>영화 후기</h2>
+        <div class="comment-list" id="comment-list"></div>
+        <div class="comment-input-section">
+          <input
+            type="text"
+            placeholder="댓글을 입력하세요."
+            id="comment-input"
+          />
+          <button onClick="addComment()">댓글 등록</button>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      let movieData;
+
+      function generateMovieInfoSection(movie) {
+        const section = document.getElementById("movie-detail-section");
+        section.innerHTML = `
+          <img
+          src=${`../images/${movie.movie_image}`}
+          alt="${movie.movie_image}"
+          className="movie-image"
+        />
+        <div class="movie-detail-info">
+          <p style="font-size: 1rem; color: blue">
+            영화 ID: ${movieData.movie_id}
+          </p>
+          <p style="font-size: 2rem; font-weight: bold">
+            ${movieData.movie_title}
+          </p>
+          <p style="font-size: 1.2rem">
+            개봉일: ${movieData.movie_release_date}
+          </p>
+          <p style="font-size: 1.2rem; color: red">평점: ★ ${
+            movieData.movie_rate
+          }</p>
+          <p style="font-size: 1rem; color: #4e4e4e">
+            ${movieData.movie_overview.replaceAll("&quot;", '"')}
+          </p>
+        </div>
+        `;
+      }
+
+      async function getMovieData() {
+        const id = new URLSearchParams(window.location.search).get("id");
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", `/api/movies/${id}`, true);
+
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              try {
+                const rows = JSON.parse(xhr.responseText);
+                movieData = rows[0];
+                generateMovieInfoSection(movieData);
+                resolve();
+              } catch (error) {
+                console.error("영화 데이터를 로딩하는데 실패했습니다:", error);
+                reject(error);
+              }
+            } else {
+              reject(
+                new Error(
+                  `영화 데이터를 불러오는 중 네트워크 오류가 발생했습니다. HTTP Status: ${xhr.status}`
+                )
+              );
+            }
+          };
+
+          xhr.onerror = function () {
+            console.error(
+              "영화 데이터를 불러오는 중 네트워크 오류가 발생했습니다:",
+              xhr.statusText
+            );
+            reject(new Error("네트워크 오류가 발생했습니다."));
+          };
+
+          xhr.send();
+        });
+      }
+
+      async function addComment() {
+        const id = new URLSearchParams(window.location.search).get("id");
+        const comment = document.getElementById("comment-input").value;
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `/api/comments/${id}`, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({ comment }));
+        xhr.onload = function () {
+          if (xhr.status === 201) {
+            getComments();
+            document.getElementById("comment-input").value = "";
+          } else {
+            console.error("댓글 등록 실패. HTTP Status:", xhr.status);
+          }
+        };
+        xhr.onerror = function () {
+          console.error("댓글 등록 실패:", xhr.statusText);
+        };
+      }
+
+      async function getComments() {
+        const id = new URLSearchParams(window.location.search).get("id");
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `/api/comments/${id}`, true);
+        xhr.send();
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            const comments = JSON.parse(xhr.responseText);
+            const commentList = document.getElementById("comment-list");
+            commentList.innerHTML = "";
+            comments.forEach((comment) => {
+              commentList.innerHTML += `<p>${comment.comment}</p>`;
+            });
+          } else {
+            console.error("댓글 불러오기 실패. HTTP Status:", xhr.status);
+          }
+        };
+        xhr.onerror = function () {
+          console.error("댓글 불러오기 실패:", xhr.statusText);
+        };
+      }
+
+      window.onload = async () => {
+        await getMovieData();
+        await getComments();
+      };
+    </script>
+  </body>
+</html>

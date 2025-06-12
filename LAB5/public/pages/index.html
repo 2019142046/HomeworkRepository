@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CSI2109-Lab5 (MainPage)</title>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <h1>CSI 영화 정보 사이트</h1>
+      <nav>
+        <a href="#" class="noroute">메인 페이지</a>
+        <a href="/login">로그인</a>
+        <a href="/signup">회원가입</a>
+      </nav>
+      <section class="keyword-filter-section">
+        <input
+          type="text"
+          class="keyword-filter-input"
+          placeholder="키워드 입력"
+        />
+        <button class="keyword-filter-button">검색</button>
+      </section>
+      <section class="main-section">
+        <div class="main-section-header">Movies</div>
+        <div class="sort-filter">
+          <p>정렬 기준</p>
+          <div class="radio-group">
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-rate-desc"
+                name="sort"
+                value="rate-desc"
+              />
+              <label for="sort-rate-desc">평점 내림차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-rate-asc"
+                name="sort"
+                value="rate-asc"
+              />
+              <label for="sort-rate-asc">평점 오름차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-release-desc"
+                name="sort"
+                value="release-desc"
+              />
+              <label for="sort-release-desc">개봉 내림차순</label>
+            </div>
+
+            <div class="radio-group-item">
+              <input
+                type="radio"
+                id="sort-release-asc"
+                name="sort"
+                value="release-asc"
+              />
+              <label for="sort-release-asc">개봉 오름차순</label>
+            </div>
+          </div>
+        </div>
+        <div class="movie-list"></div>
+      </section>
+    </div>
+
+    <script>
+      let movies = [];
+      let filteredMovies = [];
+      let displayingMovies = [];
+
+      function generateMovieCard(movie) {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+
+        card.innerHTML = `
+                  <img src="../images/${movie.movie_image}" alt="${
+          movie.movie_image
+        }" class="movie-image" />
+                  <div class="movie-info">
+                    ${movie.movie_overview.replaceAll('\\"', '"')}
+                  </div>
+                  <p class="movie-title">${movie.movie_title}</p>
+                  <p class="movie-release">개봉일: ${
+                    movie.movie_release_date
+                  }</p>
+                  <p class="movie-rating">★ ${movie.movie_rate}</p>
+              `;
+        card.onclick = () => {
+          window.location.href = `/movies?id=${movie.movie_id}`;
+        };
+
+        return card;
+      }
+
+      function sortMovies(sortType) {
+        switch (sortType) {
+          case "rate-desc":
+            filteredMovies.sort((a, b) => b.movie_rate - a.movie_rate);
+            break;
+          case "rate-asc":
+            filteredMovies.sort((a, b) => a.movie_rate - b.movie_rate);
+            break;
+          case "release-desc":
+            filteredMovies.sort(
+              (a, b) =>
+                new Date(b.movie_release_date) - new Date(a.movie_release_date)
+            );
+            break;
+          case "release-asc":
+            filteredMovies.sort(
+              (a, b) =>
+                new Date(a.movie_release_date) - new Date(b.movie_release_date)
+            );
+            break;
+        }
+        displayingMovies = filteredMovies.slice(0, 3);
+        loadMovies();
+      }
+
+      function filterMovies(keyword) {
+        if (!keyword) {
+          filteredMovies = movies;
+        } else {
+          filteredMovies = movies.filter((movie) =>
+            movie.movie_title.toLowerCase().includes(keyword.toLowerCase())
+          );
+        }
+        displayingMovies = filteredMovies.slice(0, 3);
+        loadMovies();
+      }
+
+      async function getMovies() {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", "/api/movies", true);
+
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              try {
+                const rows = JSON.parse(xhr.responseText);
+                movies = rows;
+                filteredMovies = movies;
+                displayingMovies = filteredMovies.slice(0, 3);
+                loadMovies();
+                registerEventListeners();
+                resolve();
+              } catch (error) {
+                console.error("영화 데이터를 로딩하는데 실패했습니다:", error);
+                reject(error);
+              }
+            } else {
+              reject(
+                new Error(
+                  `영화 데이터를 불러오는 중 네트워크 오류가 발생했습니다. HTTP Status: ${xhr.status}`
+                )
+              );
+            }
+          };
+
+          xhr.onerror = function () {
+            console.error(
+              "영화 데이터를 불러오는 중 네트워크 오류가 발생했습니다:",
+              xhr.statusText
+            );
+            reject(new Error("네트워크 오류가 발생했습니다."));
+          };
+
+          xhr.send();
+        });
+      }
+
+      function registerEventListeners() {
+        const radioButtons = document.querySelectorAll('input[name="sort"]');
+        radioButtons.forEach((radio) => {
+          radio.addEventListener("change", (e) => {
+            sortMovies(e.target.value);
+          });
+        });
+
+        const searchInput = document.querySelector(".keyword-filter-input");
+        const searchButton = document.querySelector(".keyword-filter-button");
+
+        searchButton.addEventListener("click", () => {
+          filterMovies(searchInput.value);
+        });
+      }
+
+      function loadMovies() {
+        const movieList = document.querySelector(".movie-list");
+        movieList.innerHTML = "";
+
+        const displayCount = displayingMovies.length;
+        displayingMovies = filteredMovies.slice(
+          0,
+          Math.min(displayCount + 3, filteredMovies.length)
+        );
+
+        displayingMovies.forEach((movie) => {
+          const movieCard = generateMovieCard(movie);
+          movieList.appendChild(movieCard);
+        });
+      }
+
+      window.addEventListener("scroll", function () {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          loadMovies();
+        }
+      });
+
+      window.onload = getMovies;
+    </script>
+  </body>
+</html>
